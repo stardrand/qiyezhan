@@ -3,63 +3,46 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cate;
+use App\Models\Catgory;
 use Illuminate\Http\Request;
 
-class IndexController extends Controller
+class CategoryController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * 后台首页
+     * 分类添加页
      */
-    public function index(){
-        return view('admin.index');
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * 导航添加页
-     */
-    public function cateadd(){
-        return view('admin.cateadd');
+    public function add(){
+        return view('admin.category.add');
     }
 
     /**
      * @param Request $request
-     * 导航添加
+     * 分类添加
      */
-    public function cadd(Request $request){
-        $catename=$request->post('catename');
-        if(empty($catename)){
+    public function adds(Request $request){
+        $catname=$request->post('catname');
+        if(empty($catname)){
             $arr=[
                 'code'=>'300',
-                'msg'=>'导航名称未填',
+                'msg'=>'分类名称未填',
                 'sult'=>[]
             ];
             return json_encode($arr,JSON_UNESCAPED_UNICODE);
         }
-        $url=$request->post('url');
-        if(empty($url)){
+        $catgory=$request->post('catgory');
+        if(empty($catgory)){
             $arr=[
                 'code'=>'300',
-                'msg'=>'url未填',
+                'msg'=>'分类组序号未填',
                 'sult'=>[]
             ];
             return json_encode($arr,JSON_UNESCAPED_UNICODE);
         }
-        $is_show=$request->post('is_show');
-        $sort=$request->post('sort');
-        if(empty($sort)){
-            $arr=[
-                'code'=>'300',
-                'msg'=>'排序未填',
-                'sult'=>[]
-            ];
-            return json_encode($arr,JSON_UNESCAPED_UNICODE);
-        }
-        $createtime=time();
-        $model=new Cate();
-        $res=$model::where(['catename'=>$catename])->first();
+        $is_list=$request->post('is_list');
+        $addtime=time();
+        $model=new Catgory();
+        $res=$model::where(['catname'=>$catname])->first();
         if(!empty($res)){
             $arr=[
                 'code'=>'300',
@@ -68,11 +51,10 @@ class IndexController extends Controller
             ];
             return json_encode($arr,JSON_UNESCAPED_UNICODE);
         }else{
-            $model->catename=$catename;
-            $model->url=$url;
-            $model->is_show=$is_show;
-            $model->sort=$sort;
-            $model->createtime=$createtime;
+            $model->catname=$catname;
+            $model->catgory=$catgory;
+            $model->is_list=$is_list;
+            $model->addtime=$addtime;
             if($model->save()){
                 $arr=[
                     'code'=>'200',
@@ -96,11 +78,11 @@ class IndexController extends Controller
     /**
      * 展示页
      */
-    public function catelist(){
-        $model=new Cate();
-        $res=$model::where(['is_del'=>1])->orderByRaw('sort desc')->paginate(5);
+    public function lists(){
+        $model=new Catgory();
+        $res=$model::where(['is_del'=>1])->paginate(5);
 //        dd($res);
-        return view('admin.catelist',['res'=>$res]);
+        return view('admin.category.list',['res'=>$res]);
     }
 
     /**
@@ -110,7 +92,7 @@ class IndexController extends Controller
     public function del(Request $request){
         $id=$request->post('id');
 //        echo $id;
-        $model=new Cate();
+        $model=new Catgory();
         $res=$model::where(['id'=>$id])->first();
         $res->is_del=2;
         if($res->save()){
@@ -135,10 +117,10 @@ class IndexController extends Controller
      * 修改
      */
     public function update($id){
-        $model=new Cate();
+        $model=new Catgory();
         $res=$model::where(['id'=>$id])->first()->toArray();
 //        dd($res);
-        return view('admin.cateupdate',['res'=>$res]);
+        return view('admin.category.catupdate',['res'=>$res]);
     }
 
     /**
@@ -147,37 +129,29 @@ class IndexController extends Controller
      * 修改
      */
     public function updates(Request $request){
-        $catename=$request->post('catename');
-        if(empty($catename)){
+        $catname=$request->post('catname');
+//        dd($catname);
+        if(empty($catname)){
             $arr=[
                 'code'=>'300',
-                'msg'=>'导航名称未填',
+                'msg'=>'分类名称未填',
                 'sult'=>[]
             ];
             return json_encode($arr,JSON_UNESCAPED_UNICODE);
         }
-        $url=$request->post('url');
-        if(empty($url)){
+        $catgory=$request->post('catgory');
+        if(empty($catgory)){
             $arr=[
                 'code'=>'300',
-                'msg'=>'url未填',
+                'msg'=>'分类组序号未填',
                 'sult'=>[]
             ];
             return json_encode($arr,JSON_UNESCAPED_UNICODE);
         }
-        $is_show=$request->post('is_show');
-        $sort=$request->post('sort');
-        if(empty($sort)){
-            $arr=[
-                'code'=>'300',
-                'msg'=>'排序未填',
-                'sult'=>[]
-            ];
-            return json_encode($arr,JSON_UNESCAPED_UNICODE);
-        }
-        $createtime=time();
+        $is_list=$request->post('is_list');
+        $addtime=time();
         $id=$request->post('id');
-        $model=new Cate();
+        $model=new Catgory();
         $res=$model::where(['id'=>$id])->first();
         if(empty($res)){
             $arr=[
@@ -187,11 +161,10 @@ class IndexController extends Controller
             ];
             return json_encode($arr,JSON_UNESCAPED_UNICODE);
         }else{
-            $res->catename=$catename;
-            $res->url=$url;
-            $res->is_show=$is_show;
-            $res->sort=$sort;
-            $res->createtime=$createtime;
+            $res->catname=$catname;
+            $res->catgory=$catgory;
+            $res->is_list=$is_list;
+            $res->addtime=$addtime;
             if($res->save()){
                 $arr=[
                     'code'=>'200',
@@ -213,17 +186,17 @@ class IndexController extends Controller
     /**
      * 是否展示急点急改
      */
-    public function dianshow(Request $request){
-        $is_show=$request->post('is_show');
+    public function dshow(Request $request){
+        $is_list=$request->post('is_list');
         $id=$request->post('id');
-        if($is_show==1){
-            $is_show=2;
-        }else if($is_show==2){
-            $is_show=1;
+        if($is_list==1){
+            $is_list=2;
+        }else if($is_list==2){
+            $is_list=1;
         }
-        $model=new Cate();
+        $model=new Catgory();
         $res=$model::where(['id'=>$id])->first();
-        $res->is_show=$is_show;
+        $res->is_list=$is_list;
         if($res->save()){
             $arr=[
                 'code'=>'200',
@@ -248,7 +221,7 @@ class IndexController extends Controller
     public function updatesort(Request $request){
         $id=$request->post('id');
         $sort=$request->post('sort');
-        $model=new Cate();
+        $model=new Catgory();
         $res=$model::where(['id'=>$id])->first();
         $res->sort=$sort;
         if($res->save()){

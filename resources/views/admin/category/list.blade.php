@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>导航展示</title>
-<link rel="stylesheet" type="text/css" href="css/css.css" />
-<script type="text/javascript" src="js/jquery.min.js"></script>
+<title>分类展示</title>
+<link rel="stylesheet" type="text/css" href="../css/css.css" />
+<script type="text/javascript" src="../js/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 <!-- <script type="text/javascript" src="js/page.js" ></script> -->
 </head>
@@ -12,8 +12,8 @@
 	<div id="pageAll">
 		<div class="pageTop">
 			<div class="page">
-				<img src="img/coin02.png" /><span><a href="#">首页</a>&nbsp;-&nbsp;<a
-					href="#">导航管理</a>&nbsp;-</span>&nbsp;查看
+				<img src="../img/coin02.png" /><span><a href="/admin">首页</a>&nbsp;-&nbsp;<a
+					href="#">分类管理</a>&nbsp;-</span>&nbsp;查看
 			</div>
 		</div>
 		<div class="page">
@@ -24,8 +24,8 @@
 					<table border="1" cellspacing="0" cellpadding="0">
 						<tr>
 							<td width="66px" class="tdColor tdC">ID</td>
-							<td width="315px" class="tdColor">导航名称</td>
-							<td width="308px" class="tdColor">url</td>
+							<td width="315px" class="tdColor">分页名称</td>
+							<td width="308px" class="tdColor">分类组序号</td>
 							<td width="215px" class="tdColor">是否显示</td>
 							<td width="180px" class="tdColor">排序</td>
 							<td width="125px" class="tdColor">添加时间</td>
@@ -34,20 +34,19 @@
 						@foreach($res as $k=>$v)
 						<tr uid="{{$v['id']}}">
 							<td>{{$v['id']}}</td>
-							<td>{{$v['catename']}}</td>
-							<td>{{$v['url']}}</td>
-							<td class="is_show" show="{{$v['is_show']}}">
-								@if($v['is_show']==1)
+							<td>{{$v['catname']}}</td>
+							<td>{{$v['catgory']}}</td>
+							<td class="is_list" list="{{$v['is_list']}}">
+								@if($v['is_list']==1)
 									是
-								@elseif($v['is_show']==2)
+								@elseif($v['is_list']==2)
 									否
 								@endif
 							</td>
-							<td><span class="zsort">{{$v['sort']}}</span><input type="text" class="sort" value="{{$v['sort']}}"/></td>
-							<td>{{date("Y-m-d h:i:s",$v['createtime'])}}</td>
-							<td><a href="/update/{{$v['id']}}"><img class="operation"
-									src="img/update.png"></a><img class="operation delban"
-								src="img/delete.png"></td>
+							<td>{{date("Y-m-d h:i:s",$v['addtime'])}}</td>
+							<td><a href="/category/update/{{$v['id']}}"><img class="operation"
+									src="../img/update.png"></a><img class="operation delban"
+								src="../img/delete.png"></td>
 						</tr>
 						@endforeach
 					</table>
@@ -62,7 +61,7 @@
 	<div class="banDel">
 		<div class="delete">
 			<div class="close">
-				<a><img src="img/shanchu.png" /></a>
+				<a><img src="../img/shanchu.png" /></a>
 			</div>
 			<p class="delP1">你确定要删除此条记录吗？</p>
 			<p class="delP2">
@@ -75,10 +74,10 @@
 <script type="text/javascript">
     $(document).on('click','.delban',function(){
         var id=$(this).parents('tr').attr('uid');
-        console.log(id);
+//        console.log(id);
         if(confirm("你确定要删除此条记录吗？")){
             $.ajax({
-                url: "/del",
+                url: "/category/del",
                 data: {id: id},
                 dataType: "json",
                 type: "post",
@@ -95,15 +94,13 @@
 
 
 //是否显示急点急改
-$(document).on('click','.is_show',function(){
+$(document).on('click','.is_list',function(){
     var id=$(this).parents('tr').attr('uid');
-    var is_show=$(this).attr('show');
-//    console.log(id);
-//    console.log(is_show);
+    var is_list=$(this).attr('list');
     $.ajax({
-        url: "{{'/dianshow'}}",
+        url: "{{'/category/dshow'}}",
         type: 'post',
-        data: {is_show:is_show,id:id},
+        data: {is_list:is_list,id:id},
         dataType: 'json',
         success: function (res) {
             if(res.code=='200'){
@@ -114,35 +111,5 @@ $(document).on('click','.is_show',function(){
         }
     });
 });
-    //排序急点急改
-    $(document).ready(function(){
-        $('.sort').hide();
-        //显示文本框
-        $(document).on('click','.zsort',function(){
-            $(this).hide();
-            $(this).next().show();
-        });
-        //失去焦点
-        $(document).on('blur','.sort',function(){
-            var id=$(this).parents('tr').attr('uid');
-            var sort=$(this).val();
-            console.log(sort);
-            console.log(id);
-            $.ajax({
-                url: "{{'/updatesort'}}",
-                type: 'post',
-                data: {sort:sort,id:id},
-                dataType: 'json',
-                success: function (res) {
-                    if(res.code=='200'){
-                        window.location.href=""
-                    }else{
-                        alert(res.msg);
-                    }
-                }
-            });
-        });
-    });
-
 </script>
 </html>
