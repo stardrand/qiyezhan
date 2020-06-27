@@ -51,11 +51,10 @@
         var catname=$("#catname").val();
         var catgory=$("#catgory").val();
         var is_list=$(".is_list:checked").val();
-        console.log(id);
-        console.log(catname);
-        console.log(catgory);
-        console.log(is_list);
-        console.log(sort);
+//        console.log(id);
+//        console.log(catname);
+//        console.log(catgory);
+//        console.log(is_list);
         $.ajax({
             url: "{{'/category/updates'}}",
             type: 'post',

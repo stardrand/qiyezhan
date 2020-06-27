@@ -27,7 +27,6 @@
 							<td width="315px" class="tdColor">分页名称</td>
 							<td width="308px" class="tdColor">分类组序号</td>
 							<td width="215px" class="tdColor">是否显示</td>
-							<td width="180px" class="tdColor">排序</td>
 							<td width="125px" class="tdColor">添加时间</td>
 							<td width="125px" class="tdColor">操作</td>
 						</tr>
