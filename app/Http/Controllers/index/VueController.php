@@ -20,7 +20,7 @@ class VueController extends Controller
         $gory=$category::where(['is_list'=>1,'is_del'=>1])->get()->toArray();
         //内容
         $title=new Title();
-        $titleinfo=$title::where(['c_id'=>$gory[0]['id']])->get()->toArray();
+        $titleinfo=$title::where(['c_id'=>$gory[0]['id']])->limit(5)->get()->toArray();
 
         $res=[
             'cate'=>$cate,
@@ -32,5 +32,8 @@ class VueController extends Controller
 
     public function titlesou(Request $request){
         $c_id=$request->post('c_id');
+        $title=new Title();
+        $titleinfo=$title::where(['c_id'=>$c_id])->limit(5)->get()->toArray();
+        return json_encode($titleinfo,JSON_UNESCAPED_UNICODE);
     }
 }

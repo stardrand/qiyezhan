@@ -73,8 +73,8 @@ $(".navbg").capacityFixed();
         {{--分类--}}
       <div class="news-title">
         <div class="news-name tab-nav j-tab-nav">
-        	<a href="javascript:void(0);" class="current" v-for="init in category" @click="cateinfo">
-            <input type="hidden" value="${init['id']}">${init['catname']}<i></i></a>
+        	<a href="javascript:void(0);" class="" v-bind="{class:current}"  v-for="init in category" @click="cateinfo(init.id)">
+            ${init['catname']}<i></i></a>
         </div>
         <a href="#" class="more">更多 >></a>
       </div>
@@ -82,7 +82,7 @@ $(".navbg").capacityFixed();
 
       <div class="tab-con">
       <div class="j-tab-con">
-      <div class="tab-con-item news-con" style="display: block;">
+      <div class="tab-con-item news-con" style="display: block;" >
         <div class="hotnews">
           <h1>${titledate[0]['title_name']}</h1>
           <div class="hotcon"><a href="#">${titledate[0]['content']}</a></div>
@@ -457,6 +457,7 @@ $(".navbg").capacityFixed();
             catedata:null,
             category:null,
             titledate:null,
+            current:null,
         },
         mounted(){
         var url="/index/cate";
@@ -469,16 +470,19 @@ $(".navbg").capacityFixed();
     },
 //分类点击
         methods:{
-            cateinfo:function() {
-////                var c_id=
-//                var url = "/index/titlesou";
-//                var date = {
-//                    c_id: c_id,
-//                };
-//                console.log(date);
-////                axios.post(url, date).then(function (res) {
-////
-////                });
+            cateinfo(id){
+                this.current="current";
+
+                var c_id=id;
+                var url = "/index/titlesou";
+                var date = {
+                    c_id: c_id,
+                };
+                axios.post(url, date).then(function (res) {
+                    console.log(res);
+                    vm.titledate=res.data;
+
+                });
             }
         },
 
