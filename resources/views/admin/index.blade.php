@@ -10,6 +10,7 @@
 <!-- 引用左边和主体部分 --> <frameset rows="100*" cols="220,*" scrolling="No"
 	framespacing="0" frameborder="no" border="0"> <frame
 	src="inc/left.html" name="leftmenu" id="mainFrame" title="mainFrame">
+		<center><b style="color: red">{{session('msg')}}</b></center>
 <frame src="inc/main.html" name="main" scrolling="yes" noresize="noresize"
 	id="rightFrame" title="rightFrame"></frameset></frameset>
 </html>
